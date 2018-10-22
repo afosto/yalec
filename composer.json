@@ -1,0 +1,27 @@
+{
+  "name": "afosto/yalec",
+  "description": "Yet Another LetsEncrypt client",
+  "type": "package",
+  "keywords": [
+    "afosto",
+    "lets",
+    "encrypt"
+  ],
+  "homepage": "https://afosto.com",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Afosto Team",
+      "homepage": "https://afosto.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Afosto\\LetsEncrypt\\": "./src"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "^6.3",
+    "league/flysystem": "^1.0"
+  }
+}
