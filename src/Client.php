@@ -216,8 +216,12 @@ class Client
             $authorization->setIdentifier($result['identifier']['type'], $result['identifier']['value']);
 
             foreach ($result['challenges'] as $challenge) {
-                $authorization->addChallenge($challenge['type'], $challenge['status'], $challenge['token'],
-                    $challenge['uri']);
+                $authorization->addChallenge(
+                    $challenge['type'],
+                    $challenge['status'],
+                    $challenge['token'],
+                    $challenge['uri']
+                );
             }
             $authorizations[] = $authorization;
         }
@@ -318,9 +322,9 @@ class Client
         $userDirectory = preg_replace('/[^a-z0-9]+/', '-', strtolower($this->getOption('username')));
 
         return $this->getOption(
-                'basePath',
-                'le'
-            ) . DIRECTORY_SEPARATOR . $userDirectory . ($path === null ? '' : DIRECTORY_SEPARATOR . $path);
+            'basePath',
+            'le'
+        ) . DIRECTORY_SEPARATOR . $userDirectory . ($path === null ? '' : DIRECTORY_SEPARATOR . $path);
     }
 
     /**

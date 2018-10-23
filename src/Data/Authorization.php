@@ -2,7 +2,6 @@
 
 namespace Afosto\LetsEncrypt\Data;
 
-
 use Afosto\LetsEncrypt\Client;
 
 class Authorization
