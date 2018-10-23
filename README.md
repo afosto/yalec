@@ -1,4 +1,4 @@
-# Yalec - Yet anther lets encrypt client
+# Yalec - Yet another lets encrypt client
 
 Written in PHP, YALEC aims to be a decoupled LetsEncrypt client.
 
