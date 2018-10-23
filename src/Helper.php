@@ -36,6 +36,24 @@ class Helper
     }
 
     /**
+     * @param $certificate
+     *
+     * @return \DateTime
+     * @throws \Exception
+     */
+    public static function getCertExpiryDate($certificate)
+    {
+        $info = openssl_x509_parse($certificate);
+        if ($info === false) {
+            throw new \Exception('Could not parse certificate');
+        }
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($info['validTo_time_t']);
+
+        return $dateTime;
+    }
+
+    /**
      * @return string
      */
     public static function getNewKey()

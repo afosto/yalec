@@ -2,6 +2,8 @@
 
 namespace Afosto\LetsEncrypt\Data;
 
+use Afosto\LetsEncrypt\Helper;
+
 class Certificate
 {
 
@@ -19,6 +21,11 @@ class Certificate
      * @var string
      */
     protected $csr;
+
+    /**
+     * @var \DateTime
+     */
+    protected $expiryDate;
 
     /**
      * @param $key
@@ -52,6 +59,7 @@ class Certificate
     public function setCertificate($certificate)
     {
         $this->certificate = $certificate;
+        $this->expiryDate = Helper::getCertExpiryDate($certificate);
 
         return $this;
     }
@@ -62,6 +70,14 @@ class Certificate
     public function getCsr()
     {
         return $this->csr;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExpiryDate()
+    {
+        return $this->expiryDate;
     }
 
     /**
