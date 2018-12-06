@@ -85,7 +85,7 @@ foreach ($authorizations as $authorization) {
 Once the challenges are in place you can request LetsEncrypt to verify the challenges: 
 ```php
 if ($client->validate($authorizations)) {
-    $certificate = $client->getCertificate(['www.123douchestoel.nl', '123douchestoel.nl']);
+    $certificate = $client->getCertificate(['www.example.org', 'example.org']);
     
     //Store the certificate and private key where you need it
     file_put_contents('certificate.cert', $certificate->getCertificate());
