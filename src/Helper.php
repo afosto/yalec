@@ -173,7 +173,7 @@ class Helper
     public static function selfTest(Authorization $authorization)
     {
         try {
-            $client = new HttpClient([]);
+            $client = new HttpClient();
             $url = $authorization->getIdentifier()->getValue() .
                 '/.well-known/acme-challenge/' . $authorization->getFile()->getFilename();
 
