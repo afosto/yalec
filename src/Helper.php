@@ -180,6 +180,7 @@ class Helper
             $client->get($url, [
                 'allow_redirects' => true,
                 'protocols'       => ['http', 'https'],
+                'verify'          => false,
             ]);
         } catch (ClientException $e) {
             if ($e->getResponse()->getStatusCode() == 404) {
