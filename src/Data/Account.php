@@ -6,77 +6,82 @@ class Account
 {
 
     /**
-     * @var string
+     * @var array
      */
-    protected $tos;
+    protected $contact;
 
     /**
      * @var string
      */
-    protected $accountReference;
+    protected $createdAt;
 
     /**
      * @var bool
      */
-    protected $hasAgreement = false;
+    protected $isValid;
 
     /**
-     * @param $tos
-     *
-     * @return $this
+     * @var
      */
-    public function setTos($tos)
-    {
-        $this->tos = $tos;
+    protected $initialIp;
 
-        return $this;
+    /**
+     * @var string
+     */
+    protected $accountURL;
+
+
+    public function __construct(
+        array $contact,
+        \DateTime $createdAt,
+        bool $isValid,
+        string $initialIp,
+        string $accountURL
+    ) {
+        $this->initialIp = $initialIp;
+        $this->contact = $contact;
+        $this->createdAt = $createdAt;
+        $this->isValid = $isValid;
+        $this->accountURL = $accountURL;
+    }
+
+    public function getId(): string
+    {
+        return substr($this->accountURL, strrpos($this->accountURL, '/') + 1);
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+
+    public function getAccountURL(): string
+    {
+        return $this->accountURL;
     }
 
     /**
-     * @param $reference
-     *
-     * @return $this
+     * @return array
      */
-    public function setAccountReference($reference)
+    public function getContact(): array
     {
-        $this->accountReference = $reference;
-
-        return $this;
+        return $this->contact;
     }
 
     /**
      * @return string
      */
-    public function getTos()
+    public function getInitialIp(): string
     {
-        return $this->tos;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountReference()
-    {
-        return $this->accountReference;
+        return $this->initialIp;
     }
 
     /**
      * @return bool
      */
-    public function getHasAgreement()
+    public function isValid(): bool
     {
-        return $this->hasAgreement;
-    }
-
-    /**
-     * @param bool $status
-     *
-     * @return $this
-     */
-    public function setHasAgreement(bool $status = false)
-    {
-        $this->hasAgreement = (bool)$status;
-
-        return $this;
+        return $this->isValid;
     }
 }

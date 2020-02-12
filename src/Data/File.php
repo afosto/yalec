@@ -15,34 +15,17 @@ class File
      */
     protected $contents;
 
-    /**
-     * @param $filename
-     *
-     * @return $this
-     */
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
 
-        return $this;
-    }
-
-    /**
-     * @param $contents
-     *
-     * @return $this
-     */
-    public function setContents($contents)
+    public function __construct(string $filename, string $contents)
     {
         $this->contents = $contents;
-
-        return $this;
+        $this->filename = $filename;
     }
 
     /**
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -50,7 +33,7 @@ class File
     /**
      * @return string
      */
-    public function getContents()
+    public function getContents(): string
     {
         return $this->contents;
     }
