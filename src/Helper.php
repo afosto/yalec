@@ -9,39 +9,28 @@ use GuzzleHttp\Exception\ClientException;
 class Helper
 {
 
+    /**
+     * Formatter
+     * @param $pem
+     * @return false|string
+     */
     public static function toDer($pem)
     {
-
         $lines = explode(PHP_EOL, $pem);
         $lines = array_slice($lines, 1, -1);
 
         return base64_decode(implode('', $lines));
     }
 
-    public static function toPem($der)
-    {
-        return '-----BEGIN CERTIFICATE-----' . PHP_EOL
-            . chunk_split(base64_encode($der), 64, PHP_EOL)
-            . '-----END CERTIFICATE-----' . PHP_EOL;
-    }
-
     /**
-     * @param $link
+     * Return certificate expiry date
      *
-     * @return bool|string
-     */
-    public static function stripLinkTags($link)
-    {
-        return substr($link, strpos($link, '<') + 1, strpos($link, '>') - 1);
-    }
-
-    /**
      * @param $certificate
      *
      * @return \DateTime
      * @throws \Exception
      */
-    public static function getCertExpiryDate($certificate)
+    public static function getCertExpiryDate($certificate): \DateTime
     {
         $info = openssl_x509_parse($certificate);
         if ($info === false) {
@@ -54,9 +43,11 @@ class Helper
     }
 
     /**
+     * Get a new key
+     *
      * @return string
      */
-    public static function getNewKey()
+    public static function getNewKey(): string
     {
 
         $key = openssl_pkey_new([
@@ -69,15 +60,17 @@ class Helper
     }
 
     /**
+     * Get a new CSR
+     *
      * @param array $domains
-     * @param       $primaryDomain
      * @param       $key
      *
      * @return string
      * @throws \Exception
      */
-    public static function getCsr(array $domains, $primaryDomain, $key)
+    public static function getCsr(array $domains, $key): string
     {
+        $primaryDomain = current(($domains));
         $config = [
             '[req]',
             'distinguished_name=req_distinguished_name',
@@ -122,7 +115,7 @@ class Helper
      *
      * @return string
      */
-    public static function toSafeString($data)
+    public static function toSafeString($data): string
     {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
@@ -133,7 +126,7 @@ class Helper
      * @return array
      * @throws \Exception
      */
-    public static function getKeyDetails($key)
+    public static function getKeyDetails($key): array
     {
         $accountDetails = openssl_pkey_get_details($key);
         if ($accountDetails === false) {
@@ -141,64 +134,5 @@ class Helper
         }
 
         return $accountDetails;
-    }
-
-    /**
-     * @param Authorization $authorization
-     * @param string        $type
-     *
-     * @return bool
-     */
-    public static function isValid(Authorization $authorization, $type = Client::VALIDATION_HTTP)
-    {
-        foreach ($authorization->getChallenges() as $challenge) {
-            if ($challenge->getType() == $type) {
-                $client = new HttpClient();
-                $response = $client->get($challenge->getUri());
-
-                $result = \GuzzleHttp\json_decode((string)$response->getBody(), true);
-
-                return $result['status'] == 'valid';
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Authorization $authorization
-     *
-     * @return bool
-     */
-    public static function selfTest(Authorization $authorization)
-    {
-        try {
-            $client = new HttpClient();
-            $url = $authorization->getIdentifier()->getValue() .
-                '/.well-known/acme-challenge/' . $authorization->getFile()->getFilename();
-
-            $client->get($url, [
-                'allow_redirects' => true,
-                'protocols'       => ['http', 'https'],
-                'verify'          => false,
-            ]);
-        } catch (ClientException $e) {
-            if ($e->getResponse()->getStatusCode() == 404) {
-                return false;
-            }
-        }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function getIntermediate($url)
-    {
-        $client = new HttpClient();
-        $response = $client->get($url);
-        $intermediateCertificate = Helper::toPem((string)$response->getBody());
-
-        return $intermediateCertificate;
     }
 }

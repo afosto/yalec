@@ -8,9 +8,9 @@ class Authorization
 {
 
     /**
-     * @var Identifier
+     * @var string
      */
-    protected $identifier;
+    protected $domain;
 
     /**
      * @var \DateTime
@@ -25,100 +25,69 @@ class Authorization
     /**
      * @var string
      */
-    protected $thumbprint;
+    protected $digest;
 
-    /**
-     * Authorization constructor.
-     *
-     * @param $thumbprint
-     */
-    public function __construct($thumbprint)
+    public function __construct(string $domain, string $expires, string $digest)
     {
-        $this->thumbprint = $thumbprint;
+        $this->domain = $domain;
+        $this->expires = (new \DateTime())->setTimestamp(strtotime($expires));
+        $this->digest = $digest;
+    }
+
+    public function addChallenge(Challenge $challenge)
+    {
+        $this->challenges[] = $challenge;
     }
 
     /**
-     * @param $type
-     * @param $value
-     *
-     * @return $this
+     * @return array
      */
-    public function setIdentifier($type, $value)
+    public function getDomain(): string
     {
-        $this->identifier = new Identifier();
-        $this->identifier->setType($type)->setValue($value);
-
-        return $this;
+        return $this->domain;
     }
 
-    /**
-     * @return Identifier
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * @param \DateTime $expires
-     *
-     * @return $this
-     */
-    public function setExpires(\DateTime $expires)
-    {
-        $this->expires = $expires;
-
-        return $this;
-    }
 
     /**
      * @return \DateTime
      */
-    public function getExpires()
+    public function getExpires(): \DateTime
     {
         return $this->expires;
     }
 
     /**
-     * @param $type
-     * @param $status
-     * @param $token
-     * @param $uri
-     *
-     * @return $this
-     */
-    public function addChallenge($type, $status, $token, $uri)
-    {
-        $challenge = new Challenge();
-        $challenge->setType($type)->setStatus($status)->setToken($token)->setUri($uri);
-        $this->challenges[] = $challenge;
-
-        return $this;
-    }
-
-    /**
      * @return Challenge[]
      */
-    public function getChallenges()
+    public function getChallenges(): array
     {
         return $this->challenges;
     }
 
     /**
-     * @return File|bool
+     * @return Challenge|bool
      */
-    public function getFile()
+    public function getHttpChallenge()
     {
         foreach ($this->getChallenges() as $challenge) {
             if ($challenge->getType() == Client::VALIDATION_HTTP) {
-                $file = new File();
-                $file->setFilename($challenge->getToken());
-                $file->setContents($challenge->getToken() . '.' . $this->thumbprint);
-
-                return $file;
+                return $challenge;
             }
         }
 
+        return false;
+    }
+
+    /**
+     * @param Challenge $challenge
+     * @return File|bool
+     */
+    public function getFile(Challenge $challenge)
+    {
+        if ($challenge->getType() == Client::VALIDATION_HTTP) {
+            $file = new File($challenge->getToken(), $challenge->getToken() . '.' . $this->digest);
+            return $file;
+        }
         return false;
     }
 }

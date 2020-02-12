@@ -8,6 +8,11 @@ class Challenge
     /**
      * @var string
      */
+    protected $authorizationURL;
+
+    /**
+     * @var string
+     */
     protected $type;
 
     /**
@@ -18,7 +23,7 @@ class Challenge
     /**
      * @var string
      */
-    protected $uri;
+    protected $url;
 
     /**
      * @var string
@@ -26,65 +31,34 @@ class Challenge
     protected $token;
 
     /**
-     * @param $type
-     *
-     * @return $this
+     * Challenge constructor.
+     * @param string $authorizationURL
+     * @param string $type
+     * @param string $status
+     * @param string $url
+     * @param string $token
      */
-    public function setType($type)
+    public function __construct(string $authorizationURL, string $type, string $status, string $url, string $token)
     {
+        $this->authorizationURL = $authorizationURL;
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @param $status
-     *
-     * @return $this
-     */
-    public function setStatus($status)
-    {
         $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @param $uri
-     *
-     * @return $this
-     */
-    public function setUri($uri)
-    {
-        $this->uri = $uri;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    /**
-     * @param $token
-     *
-     * @return $this
-     */
-    public function setToken($token)
-    {
+        $this->url = $url;
         $this->token = $token;
-
-        return $this;
     }
 
     /**
      * @return string
      */
-    public function getType()
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
     {
         return $this->type;
     }
@@ -92,8 +66,18 @@ class Challenge
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function getAuthorizationURL(): string
+    {
+        return $this->authorizationURL;
     }
 }

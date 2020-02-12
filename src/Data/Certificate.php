@@ -28,46 +28,24 @@ class Certificate
     protected $expiryDate;
 
     /**
-     * @param $key
-     *
-     * @return $this
-     */
-    public function setPrivateKey($key)
-    {
-        $this->privateKey = $key;
-
-        return $this;
-    }
-
-    /**
+     * Certificate constructor.
+     * @param $privateKey
      * @param $csr
-     *
-     * @return $this
-     */
-    public function setCsr($csr)
-    {
-        $this->csr = $csr;
-
-        return $this;
-    }
-
-    /**
      * @param $certificate
-     *
-     * @return $this
+     * @throws \Exception
      */
-    public function setCertificate($certificate)
+    public function __construct($privateKey, $csr, $certificate)
     {
+        $this->privateKey = $privateKey;
+        $this->csr = $csr;
         $this->certificate = $certificate;
         $this->expiryDate = Helper::getCertExpiryDate($certificate);
-
-        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCsr()
+    public function getCsr(): string
     {
         return $this->csr;
     }
@@ -75,7 +53,7 @@ class Certificate
     /**
      * @return \DateTime
      */
-    public function getExpiryDate()
+    public function getExpiryDate(): \DateTime
     {
         return $this->expiryDate;
     }
@@ -83,7 +61,7 @@ class Certificate
     /**
      * @return string
      */
-    public function getCertificate()
+    public function getCertificate(): string
     {
         return $this->certificate;
     }
@@ -91,7 +69,7 @@ class Certificate
     /**
      * @return string
      */
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return $this->privateKey;
     }
