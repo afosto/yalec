@@ -2,6 +2,7 @@
   "name": "afosto/yalec",
   "description": "Yet Another LetsEncrypt client",
   "type": "package",
+  "abandoned": "afosto/yaac",
   "keywords": [
     "afosto",
     "lets",
