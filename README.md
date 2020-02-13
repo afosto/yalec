@@ -1,3 +1,5 @@
+## This package is abandoned. Look at [yaac](https://github.com/afosto/yaac)
+
 # Yalec - Yet another Lets Encrypt client
 
 Written in PHP, this client aims to be a decoupled LetsEncrypt client, based on ACME V2.
